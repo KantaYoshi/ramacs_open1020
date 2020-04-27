@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no,initial-scale=1.0,maximam-scale=1.0,minimum-scale=1.0">
+    <meta http-equiv="refresh" content="180">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>勤怠管理</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static "css/user-page_css.css" %}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">勤怠管理システム{{user}}</a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
+                aria-expand="false"
+                aria-label="ナビゲーションの切替">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="Navber">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:index' %}">管理サイト</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">トップページ</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    <div class="temple1">
+      <div class="hello">
+        <p>{{user}}様の勤務状況です。</p>
+      </div>
+    </div>
+    <div class="temple2">
+      <p>今日の勤務時間を確認    <input type="button" value="Check" onclick="workTime_today()"></p>
+      <div class="work_time">
+        <div id="edit_area"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="container">
+          <canvas id="myChart"></canvas>
+      </div>
+    </div>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <form>
+            <fieldset class="form-group">
+              <legend class="text-center">表示期間</legend>
+              <div class="text-center">
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input type="radio"　class="form-check-input" name="times" value="24" id="term_4" >
+                    24時間
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="times" value="12" id ="term_3">
+                    12時間
+                  </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="times"  value="1" id="term_1" checked >
+                  1時間
+                </label>
+            </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="myBarChart"></canvas>
+    <!-- <input type="button" value="Check" onclick="workTime_week()"> -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore-min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+    <script>
+      //reload();
+      //var color=[400,400,400];
+      //var lineBorderColor = generatePointBgcolor(color, 600, 'rgb(255, 99, 132)', 'rgb(0, 255, 255)');
+      //var color=[400,400,400];
+      //var lineBorderColor=['rgb(255,99,132)','rgb(255,99,255)','rgb(255,99,132)','rgb(255,99,132)','rgb(255,99,132)',];
+
+      //折れ線グラフ
+      var chart;
+
+      function drawChart(data){
+        var ctx=document.getElementById("myChart").getContext('2d');
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+
+                labels: data[0],
+                datasets: [{
+                    label: 'センサ値',
+                    data: data[1],
+                    yAxisID: "y-axis-1",
+                    fill:false,
+                    backgroundColor: 'rgba(255, 99, 132,0.7)',
+                    pointBackgroundColor: generatePointBgcolor(data[1], 600, 'rgb(255, 99, 132)', 'rgb(0, 255, 255)'),
+                    pointRadius: 4.2,
+                    borderColor: 'rgba(70,70, 70, 0.3)',
+                    //borderColor:'green',
+                    spanGaps: true,
+                    //borderColor:lineBorderColor,
+                    // borderColor:if(data[1]>=600){
+                    //   rgb(255,99,132),
+                    // }else{
+                    //   rgb(0,99,132),
+                    // }
+                },{
+                  label: 'しきい値',
+                  data: borderPoints(data[1],600),
+                  borderColor: 'rgba(255, 9, 232, 1)',
+                  // しきい値のマーカーを表示させたくない
+                  pointRadius: 0,
+                  // マウスホバー時のマーカーも表示させない
+                  pointHoverRadius: 0,
+                  fill: false,
+                  borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            // センサ軸（左）
+                            id: "y-axis-1",
+                            type: "linear",
+                            position: "left",
+                            ticks: {
+                                max: 1100,
+                                min: 0,
+                                stepSize: 100
+                            },
+                        }],
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                              hour:'D日H時 '
+                                //day:'MMM D'
+                            }
+                            //unit:minute
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        title: function (tooltipItem, data) {
+                            return moment(tooltipItem[0].xLabel).format('YYYY-MM-DD HH:mm')
+                        }
+                    }
+                }
+            }
+        })
+        }
+
+        //棒グラフ
+        //var barchart;
+        var ctx=document.getElementById("myBarChart").getContext('2d');
+        var today=new Date();
+        var month=today.getMonth()+1;
+        var day=today.getDate();
+        var myBarChart= new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels:[month+'/'+(day-6),month+'/'+(day-5),month+'/'+(day-4),month+'/'+(day-3),
+                              month+'/'+(day-2),month+'/'+(day-1),month+'/'+day],
+                  datasets: [{
+                      label: '勤務時間',
+                      //data: [280,480,490,400,499,99,200],
+                      data: workTime_week(),
+                      backgroundColor:"rgba(219,39,91,0.5)"
+                  }]
+              },
+              options:{
+                title:{
+                  display:true,
+                  text:'１週間の勤務時間'
+                },
+                scales:{
+                  yAxes: [{
+                    ticks: {
+                      suggestedMax: 600,
+                      suggestedMin: 0,
+                      stepSize: 100,
+                      callback: function(value, index, values){
+                        return  value +  '分'
+                      }
+                    }
+                  }]
+                },
+              }
+            });
+
+
+        //配列の要素の総和を返す関数
+        function sum_array(data){
+          var sum=0;
+          for (var i=0,len=data.length;i<len;i++){
+            sum+=data[i];
+          }
+          return sum;
+        }
+
+        //1週間の労働時間を日ごとに格納した配列を返す関数
+        function workTime_week() {
+            var jikan_now=new Date();//現在時刻の格納
+            var hour=jikan_now.getHours();//現在時刻にする??
+            var min=jikan_now.getMinutes();
+            //var data_week=[0,0,0,0,0,0,0];
+            var data_week=[];
+
+            // for (var i=0;i<7;i++){
+            //   if(i==0){data_week[6]=100;
+            //   }else {data_week[6-i]=240;}
+            // }
+
+            for(var i=0; i<7; i++){
+              // if (i==0){
+              //   var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+              //   $.getJSON('/api/logs?created_at__gte=' + param)
+              //       .done(function (source) {
+              //           var data_work = new Array(1);
+              //           const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+              //           data_work[0] = _.pluck(filted, 'work_or_sabori');
+              //           data_week[6]=workTimeCalc(data_work[0]);
+              //           //data_week[6]=200;
+              //         })
+              // }else{
+              //   var day=i;
+              //   var hour_week=hour+24*i;
+              //   var param = moment().subtract({'hours':hour_week,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+              //   $.getJSON('/api/logs?created_at__gte=' + param)
+              //       .done(function (source) {
+              //           var data_work = new Array(1);
+              //           const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+              //           data_work[0] = _.pluck(filted, 'work_or_sabori');
+              //           //data_week[6-i]=workTimeCalc(data_work[0])-sum_array(data_week);
+              //           data_week[6-i]=workTimeCalc(data_work[0]);
+              //           //data_week[6-i]=200;
+              //         })
+              //  }
+              var hour_week=hour;
+              var row=i;
+              var param = moment().subtract({'hours':hour_week+(24*i),'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+
+              $.getJSON('/api/logs?created_at__gte=' + param)
+                  .done(function (source) {
+                      var data_work = new Array(1);
+                      const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+                      data_work[0] = _.pluck(filted, 'work_or_sabori');
+                      data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+                      //data_week.push(200);
+                  })
+            }
+            //data_week=[300,300,300,300,300,300,300];
+            return data_week;
+        };
+
+        //閾値で色を変える
+        function generatePointBgcolor(points, borderPoint, safeColor, outColor) {
+          var bgColors = [];
+
+          for(var i = 0, len = points.length; i < len; i++) {
+            if(points[i] > borderPoint) {
+              bgColors.push(safeColor);
+            } else {
+              bgColors.push(outColor);
+            }
+          }
+
+          return bgColors;
+        }
+
+        //閾値の配列を作成する
+        function borderPoints(points,value){
+          var border=[];
+          for (var i=0,len=points.length;i<len;i++){
+            border.push(value);
+          }
+          return border
+        }
+
+        //仕事時間の計算
+        function workTimeCalc(data){
+          var times=0;
+          for (var i=0,len=data.length;i<len;i++){
+            if(data[i]==1){
+              times+=3;
+            }else{
+              times=times;
+            }
+          }
+          return times;
+        }
+
+        // １日の仕事時間のデータ表示
+        var workTime_today=function() {
+
+            // 指定時間を取得
+            //var times = $('input[name=times]:checked').val();
+            var jikan_now=new Date();//現在時刻の格納
+
+            var hour=jikan_now.getHours();//現在時刻にする??
+            var min=jikan_now.getMinutes();
+            // 1日、３日、７日 前 の時間を設定 paramはいつからのデータが欲しいのかの
+                                          //時間をYYYY-MM-DD HH:mm:ss形式で与える
+            // var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+            var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+            //var param = moment().subtract(min,'minutes').format('YYYY-MM-DD HH:mm:ss')
+            //var now=moment().format('YYYY-MM-DD HH:mm:ss');
+            //now =now.getHours(now.getHours()+times);
+
+            $.getJSON('/api/logs?created_at__gte=' + param)
+                .done(function (source) {
+                    var data_work = new Array(1);
+                    //var color=[];
+                    const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+                    data_work[0] = _.pluck(filted, 'work_or_sabori');
+                    //data_work[0]=[0,0,0,1,1,1,1,1];
+                    //color= _.pluck(filted, 'press_ave_3min');
+                    var str=workTimeCalc(data_work[0]);
+                    //var str=workTimeCalc([0,0,0,0,1,1,1,1]);
+                    document.getElementById('edit_area').innerHTML = str+'分' ;
+                })
+            //return data_work[0]
+        };
+
+        // データ読込
+        function reload() {
+
+            // 指定時間を取得
+            var times = $('input[name=times]:checked').val();
+            // 1日、３日、７日 前 の時間を設定 paramはいつからのデータが欲しいのかの
+                                          //時間をYYYY-MM-DD HH:mm:ss形式で与える
+            var param = moment().subtract(times,'hours').format('YYYY-MM-DD HH:mm:ss')
+            //var now=moment().format('YYYY-MM-DD HH:mm:ss');
+            //now =now.getHours(now.getHours()+times);
+
+            $.getJSON('/api/logs?created_at__gte=' + param)
+                .done(function (source) {
+                    var data = new Array(4);
+                    //var color=[];
+                    const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+                    data[0] = _.pluck(filted, 'created_at');
+                    data[1] = _.pluck(filted, 'press_ave_3min');
+                    data[2]=_.pluck(filted,'user_label');
+                    data[3]=_.pluck(filted,'work_or_sabori');
+                    //color= _.pluck(filted, 'press_ave_3min');
+                    drawChart(data);
+                })
+        };
+
+        $(document).ready(function () {
+            // ラジオボタンのイベントリスナー
+            $('input[name="times"]:radio').on('change', function () {
+                reload();
+            });
+            // 初期化
+            reload();
+        });
+
+
+
+    </script>
+
+
+  </body>
+</html>

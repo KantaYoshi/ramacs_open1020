@@ -18,7 +18,7 @@ from django.urls import path,include
 from rest_framework import routers
 
 from get_num.views import LogViewSet
-from get_num.views import MainView,LogOutView,userPage
+from get_num.views import MainView,LogOutView,userPage,KanriView
 
 router =routers.DefaultRouter()
 router.register(r'logs',LogViewSet)
@@ -28,7 +28,9 @@ urlpatterns = [
     path('api/',include(router.urls)),
     path('',MainView.as_view(),name="index"),#indexページに変更,index.htmlはユーザーページにする。
     path('logout/',LogOutView.as_view(),name="logout"),
-    path('user-page/<int:pk>/',userPage,name="user-page")
+    path('user-page/<int:pk>/',userPage,name="user-page"),
+    # path('kanri-page/',KanriView.workKanriView,name="kanri-page"),
+    path('kanri-page/',KanriView.as_view(),name="kanri-page"),
     # path('tamago/',include('get_num.urls')),
 ]
 

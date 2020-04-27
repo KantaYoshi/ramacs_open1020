@@ -1,11 +1,12 @@
 from django.shortcuts import render
 import django_filters
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic import TemplateView
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication,BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+
 
 from .models import Log
 
@@ -44,3 +45,9 @@ def userPage(request,pk):
 
 class LogOutView(TemplateView):
     template_name='logout.html'
+
+class KanriView (PermissionRequiredMixin,TemplateView):
+    permission_required='superuser'
+    template_name='kanri.html'
+    # def workKanriView(request):
+    #     return render(request,'kanri.html')

@@ -1,0 +1,19 @@
+.temple1{
+  float:left;
+  padding-left: 20px;
+}
+
+.hello p{
+  color:green;
+  font-size: 30px;
+}
+
+.temple2{
+  float:right;
+  padding-right: 50px;
+}
+
+.work_time{
+  padding-left: 100px;
+  font-size:18px;
+}
