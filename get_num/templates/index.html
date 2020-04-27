@@ -13,7 +13,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">勤怠管理システムget_num/templates/</a>
+        <a class="navbar-brand" href="#">勤怠管理システム0415/templates</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
                 aria-expand="false"
                 aria-label="ナビゲーションの切替">
@@ -29,6 +29,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kanri-page' %}">働き時間確認</a>
             </li>
           </ul>
         </div>
@@ -72,55 +75,77 @@
         </div>
       </div>
 
-      <div class="how_to_use">
+      <div class="can_do">
         <div class="h1">
-          <p><a id="how_to_use">使い方</a></p>
-        </div>
-        <div class="contents">
-          <p>ここではプロダクトの使い方を説明します。</p>
+          <p><a id="how_to_use">機能</a></p>
         </div>
         <div class="h2">
-          <p><b>アーキテクチャ</b></p>
+          <p><b>slackステータスの自動変更</b></p>
         </div>
         <div class="contents">
-          <p>画像の挿入</p>
-          <p>アーキテクチャの説明</p>
+          <img src="{% static "img/slack_auto_change.png"%}" width="80%" height="40%">
+          <p>slack</p>
         </div>
         <div class="h2">
-          <p><b>raspberrypiの配線</b></p>
+          <p><b>勤務時間の自動計測</b></p>
         </div>
         <div class="contents">
           <p>画像の挿入</p>
           <p>配線の説明</p>
         </div>
         <div class="h2">
-          <p><b>raspberrypiのプログラム</b></p>
+          <p><b>キャラクター育成</b></p>
         </div>
         <div class="contents">
-          <p>コードボックスの挿入（ラズパイ）</p>
-          <p>コードボックスの挿入（ダミーデータの送信用）</p>
-          <p>プログラムの説明</p>
+          <p>キャラクターの画像</p>
+          <p>キャラクターの説明</p>
         </div>
         <div class="h2">
-          <p><b>slackの設定</b></p>
-        </div>
-        <div class="contents">
-          <p>slack_tokeの取得方法</p>
-        </div>
-        <div class="h2">
-          <p><b>管理サイトでできること</b></p>
+          <p><b>管理サイトの設置</b></p>
         </div>
         <div class="contents">
           <p>管理サイトでできることを画像を交えて書く。</p>
         </div>
       </div>
 
-        <div class="h1">
-          <p><a id="future">今後の展望</a></p>
-        </div>
-        <div class="contents">
-          <p>ここでは今後の展望を紹介します。</p>
-        </div>
+      <div class="h1">
+        <p><a id="future">その他情報</a></p>
+      </div>
+      <div class="contents">
+        <p>ここではプロダクトの使い方を説明します。</p>
+      </div>
+      <div class="h2">
+        <p><b>アーキテクチャ</b></p>
+      </div>
+      <div class="contents">
+        <img src="{% static "img/achitecture.png"%}" width="80%" height="40%">
+        <p>構造の説明</p>
+      </div>
+      <div class="h2">
+        <p><b>slack token及びユーザーID取得方法</b></p>
+      </div>
+      <div class="contents">
+        <p>画像の挿入</p>
+        <p>token取得の説明</p>
+      </div>
+      <div class="h2">
+        <p><b>raspberrypiの配線</b></p>
+      </div>
+      <div class="contents">
+        <p>画像の挿入</p>
+        <p>配線の説明</p>
+      </div>
+      <div class="h2">
+        <p><b>raspberrypiのプログラム</b></p>
+      </div>
+      <div class="contents">
+        <p>コードボックスの挿入（ラズパイ）</p>
+        <p>コードボックスの挿入（ダミーデータの送信用）</p>
+        <p>プログラムの説明</p>
+      </div>
+
+
+
       <div class="h1">
         <p><a id="books">参考文献</a></p>
       </div>
