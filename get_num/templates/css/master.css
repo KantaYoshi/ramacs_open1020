@@ -1,0 +1,84 @@
+.h1 p{
+  font-size: 25px;
+  padding: 0.25em 0.5em;/*上下 左右の余白*/
+  color: #494949;/*文字色*/
+  background: transparent;/*背景透明に*/
+  border-left: solid 5px #7db4e6;/*左線*/
+}
+
+.contents{
+  padding:0px 20px;
+}
+
+.kinou-list{
+  font-size: 20px;
+}
+
+.h2 {
+  font-size: 20px;
+  text-decoration: underline;
+  padding:0px 12px ;
+}
+
+
+footer {
+  width: 100%;
+  height: 120px;
+  padding: 20px ;
+  background-color: #cab64a;
+  color: #fff;
+
+}
+
+.footer-logo{
+  float:left;
+  font-size: 32px;
+}
+
+.footer-list li{
+  padding-bottom: 5px;
+  list-style: none;
+}
+
+.footer-list{
+  float :right;
+}
+
+/* shioriの設定 */
+#fixed-navi{
+	background:#CCCCFF;
+	width:100%;
+}
+.shiori ul{
+	overflow:hidden;
+	list-style:none;
+}
+.shiori li{
+	float:left;
+	width:25%;
+	box-sizing: border-box;
+	border-right:1px solid #333;
+	text-align: center;
+}
+.shiori li:last-child {
+	border-right:none;
+}
+.shiori li:first-child {
+	border-left:none;
+}
+.shiori li a{
+	color:black;
+	text-decoration:none;
+	padding:10px 20px;
+	display:block;
+}
+
+.shiori li a:hover{
+	color:#333;
+	background:#555;
+}
+
+/*--// .addClass();で追加するcss //--*/
+.fixed {
+	position: fixed;
+}
