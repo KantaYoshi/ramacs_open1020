@@ -40,8 +40,8 @@
     <nav id="fixed-navi">
 	     <ul>
 		      <li><a href="#start">概要</a></li>
-		      <li><a href="#how_to_use">使い方</a></li>
-		      <li><a href="#future">今後の展望</a></li>
+		      <li><a href="#how_to_use">機能</a></li>
+		      <li><a href="#future">その他の情報</a></li>
 		      <li><a href="#books">参考文献</a></li>
 	     </ul>
      </nav>
@@ -52,7 +52,7 @@
         </div>
         <div class="contents">
           <p>ここではプロダクトの概要を説明します。</p>
-          <p>このプロダクトは5月末に開催された<a href="https://remotehackathon.peatix.com/">オンラインハッカソン</a>
+          <p>このプロダクトは5月末に開催された<a href="https://remotehackathon.peatix.com/" target="_blank">オンラインハッカソン</a>
             への出品作品です。<b>「リモートワークの時代に必要になるツール」</b>という課題のもと開発しました。</p>
           <p>実際にリモートワークを経験している社会人の方にヒアリングを行ったところ、</p>
           <ul>
@@ -61,7 +61,7 @@
             <li>雑談のタイミングが分からない。</li>
           </ul>
           <p>といった課題があることが分かりました。</p>
-          <p>そこで私たちは、２つの機能を持たせたIoTをraspberrypiを用いて開発しました。</p>
+          <p>そこで私たちは、２つの機能を持たせたIoTをRaspberryPiを用いて開発しました。</p>
           <div class="kinou-list">
             <ol>
               <li>勤怠管理システム</li>
@@ -69,7 +69,7 @@
             </ol>
           </div>
           <p><b>(勤怠管理システム)</b>
-          <br>圧力センサの値をraspberrypiで自動送信しDBで管理し、管理者及びユーザーが勤務時間を確認できる。</p>
+          <br>圧力センサの値をRaspberryPiで自動送信しDBで管理し、管理者及びユーザーが勤務時間を確認できる。</p>
           <p><b>(slackステータスの自動変更)</b>
           <br>SlackAPIを用いて、圧力センサの値に応じたステータスに自動で変更します。</p>
         </div>
@@ -125,18 +125,54 @@
         <p><b>slack token及びユーザーID取得方法</b></p>
       </div>
       <div class="contents">
-        <p>画像の挿入</p>
-        <p>token取得の説明</p>
+        <p>APIトークンの生成方法は<a href="https://slack.com/intl/ja-jp/help/articles/215770388-API-%E3%83%88%E3%83%BC%E3%82%AF%E3%83%B3%E3%81%AE%E7%94%9F%E6%88%90%E3%81%A8%E5%86%8D%E7%94%9F%E6%88%90" target="_blank">こちら</a>から確認できます。</p>
+        <p>メンバーIDの確認方法は<a href="http://help.receptionist.jp/?p=1100#memberid" target="_blank">こちら</a>から確認できます。</p>
+        <p>token取得後のテスト用プログラム</p>
+        <code>
+        <br>import requests
+        <br>import json
+        <br>USER_TOKEN = "取得したトークン"
+        <br>USER_ID = "ユーザーID"
+        <br>def change_status(text,emoji):
+        <br>    data = {
+        <br>    "token" : USER_TOKEN,
+        <br>    "user": USER_ID,
+        <br>    "profile":json.dumps({
+        <br>        "status_text":text,
+        <br>        "status_emoji":emoji,
+        <br>        "status_expiration": 0
+        <br>        })
+        <br>    }
+        <br>    res = requests.post('https://slack.com/api/users.profile.set',params = data)
+        <br>    #print(res.text) POSTした結果を表示したい場合
+        <br>    print("done!!!")
+        <br>if __name__ == '__main__':
+        <br>    change_status("error",":v::skin-tone-2:") #status_message,status_emojiの順
+        <br>print("done")
+        <br>#change_status("hello", ":face_with_monocle:")
+        <br>change_status("休憩中(連絡不可)", ":man-gesturing-no:")
+        <br>#change_status("hello",":man-gesturing-ok: ")
+        <br>#change_status("勤務中(連絡可)",":woman-gesturing-ok: ")
+</code>
       </div>
       <div class="h2">
-        <p><b>raspberrypiの配線</b></p>
+        <p><b>RaspberryPiの配線</b></p>
       </div>
       <div class="contents">
+        <p>使用した部品は以下の通りです。</p>
+        <ul>
+          <li>圧力センサ(<a href="http://akizukidenshi.com/catalog/g/gP-04158/" target="_blank">FSR406</a>)×１</li>
+          <li>A/Dコンバータ(<a href="http://akizukidenshi.com/catalog/g/gI-02584/" target="_blank">MCP3002</a>)×１</li>
+        </ul>
+        <p>Arduinoなどとは違いRaspberryPi単体では、２進数の入力にしか対応していません。
+        そのため例えば部屋の明るさだと、明かりが「ついている」or「消えている」の２段階でしか理解しません。
+        <br>これを0~1023のように幅を持ったデジタル値でとるためにA/Dコンバーターが必要になります。今回はポート数の少なく安価な
+          <a href="http://akizukidenshi.com/catalog/g/gI-02584/" target="_blank">MCP3002</a>を採用しました。</p>
         <p>画像の挿入</p>
         <p>配線の説明</p>
       </div>
       <div class="h2">
-        <p><b>raspberrypiのプログラム</b></p>
+        <p><b>RaspberryPiのプログラム</b></p>
       </div>
       <div class="contents">
         <p>コードボックスの挿入（ラズパイ）</p>
