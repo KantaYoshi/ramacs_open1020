@@ -84,12 +84,15 @@
         </div>
         <div class="contents">
           <img src="{% static "img/slack_auto_change.png"%}" width="80%" height="40%">
-          <p>slack</p>
+          <p>圧力センサにより、ユーザが着席中か離席中かを判断し、slackのステータスを自動で変更します。
+          これにより、ユーザ同士の勤務状況の見える化ができます。
+          <br>コミュニケーションをとるタイミングに迷うことが無くなり、無駄を省くことができます。</p>
         </div>
         <div class="h2">
           <p><b>勤務時間の自動計測</b></p>
         </div>
         <div class="contents">
+          <img src="{% static "img/work_or_sabori_change.png"%}" width="80%" height="40%">
           <p>画像の挿入</p>
           <p>配線の説明</p>
         </div>
@@ -97,29 +100,36 @@
           <p><b>キャラクター育成</b></p>
         </div>
         <div class="contents">
-          <p>キャラクターの画像</p>
-          <p>キャラクターの説明</p>
+          <img src="{% static "img/characters_matome.png"%}" width="80%" height="40%">
+          <p>現在時刻と一日の勤務状況の２つをパラメータにキャラクタ画像が変わります。
+          <br>ユーザの勤務状況が芳しくない時、キャラクタはDQN化したり、トラックにひかれたり。。。
+          <br>死なさないように、気を付けてください。</p>
         </div>
         <div class="h2">
-          <p><b>管理サイトの設置</b></p>
+          <p><b>superuserのみが入れる管理サイト</b></p>
         </div>
         <div class="contents">
-          <p>管理サイトでできることを画像を交えて書く。</p>
+          <img src="{% static "img/kanripage-gurahu.png"%}" width="80%" height="40%">
+          <p>管理サイトはあらかじめ設定したsuperuserのみが利用できます。この管理サイトではユーザーIDを入力することで、そのユーザーの勤務状況(1日の勤務状況、１週間の勤務時間)を見ることができます。
+          <br>この機能により、ユーザの働きすぎを防ぐことができます。また、あらかじめ設定したsuperuserしかアクセスできないので、安全です。</p>
+        　<!-- <p>成果主義に移り変わる中で、このようなプロダクトは時代錯誤的に感じるかもしれません。僕もです。
+      　　<br>ただ、似たような製品は存在しており一定のニーズはあるようですし、実際に採用している企業もあります。</p> -->
         </div>
       </div>
 
       <div class="h1">
         <p><a id="future">その他情報</a></p>
       </div>
-      <div class="contents">
-        <p>ここではプロダクトの使い方を説明します。</p>
-      </div>
       <div class="h2">
         <p><b>アーキテクチャ</b></p>
       </div>
       <div class="contents">
         <img src="{% static "img/achitecture.png"%}" width="80%" height="40%">
-        <p>構造の説明</p>
+        <p>RaspberryPiから、圧力センサ値・ユーザID等を含んだデータをJSON形式でheroku(webサーバ)に送信します。
+        その時の勤務状況(圧力センサ値)から、slackステータスを自動で変更します。これらのバックグラウンドはすべてPythonで記述し、
+        フレームワークはDjangoを使用しました。
+        <br>また、フロントサイドはHTML、CSS、JavaScriptで記述しました。ユーザー側のJavaScriptで
+        ログの読み取り、ユーザID・期間によるフィルタリングを行い表示しています。</p>
       </div>
       <div class="h2">
         <p><b>slack token及びユーザーID取得方法</b></p>
@@ -127,33 +137,7 @@
       <div class="contents">
         <p>APIトークンの生成方法は<a href="https://slack.com/intl/ja-jp/help/articles/215770388-API-%E3%83%88%E3%83%BC%E3%82%AF%E3%83%B3%E3%81%AE%E7%94%9F%E6%88%90%E3%81%A8%E5%86%8D%E7%94%9F%E6%88%90" target="_blank">こちら</a>から確認できます。</p>
         <p>メンバーIDの確認方法は<a href="http://help.receptionist.jp/?p=1100#memberid" target="_blank">こちら</a>から確認できます。</p>
-        <p>token取得後のテスト用プログラム</p>
-        <code>
-        <br>import requests
-        <br>import json
-        <br>USER_TOKEN = "取得したトークン"
-        <br>USER_ID = "ユーザーID"
-        <br>def change_status(text,emoji):
-        <br>    data = {
-        <br>    "token" : USER_TOKEN,
-        <br>    "user": USER_ID,
-        <br>    "profile":json.dumps({
-        <br>        "status_text":text,
-        <br>        "status_emoji":emoji,
-        <br>        "status_expiration": 0
-        <br>        })
-        <br>    }
-        <br>    res = requests.post('https://slack.com/api/users.profile.set',params = data)
-        <br>    #print(res.text) POSTした結果を表示したい場合
-        <br>    print("done!!!")
-        <br>if __name__ == '__main__':
-        <br>    change_status("error",":v::skin-tone-2:") #status_message,status_emojiの順
-        <br>print("done")
-        <br>#change_status("hello", ":face_with_monocle:")
-        <br>change_status("休憩中(連絡不可)", ":man-gesturing-no:")
-        <br>#change_status("hello",":man-gesturing-ok: ")
-        <br>#change_status("勤務中(連絡可)",":woman-gesturing-ok: ")
-</code>
+        <p>※※gitのurl貼る。token取得後のテスト用プログラム</p>
       </div>
       <div class="h2">
         <p><b>RaspberryPiの配線</b></p>
@@ -168,15 +152,17 @@
         そのため例えば部屋の明るさだと、明かりが「ついている」or「消えている」の２段階でしか理解しません。
         <br>これを0~1023のように幅を持ったデジタル値でとるためにA/Dコンバーターが必要になります。今回はポート数の少なく安価な
           <a href="http://akizukidenshi.com/catalog/g/gI-02584/" target="_blank">MCP3002</a>を採用しました。</p>
-        <p>画像の挿入</p>
-        <p>配線の説明</p>
+        <p>　回路　※MCP3002のへこみは右側</p>
+        <img src="{% static "img/kairozu.png"%}" width="80%" height="40%">
+        <p>圧力センサは圧力が加わると抵抗が下がる性質を持っていることから、
+          圧力センサを基準となる抵抗と並列に接続することで、圧力の変化に対する電圧の変化を読み取っています。</p>
       </div>
       <div class="h2">
         <p><b>RaspberryPiのプログラム</b></p>
       </div>
       <div class="contents">
-        <p>コードボックスの挿入（ラズパイ）</p>
-        <p>コードボックスの挿入（ダミーデータの送信用）</p>
+        <p>※※gitのurl貼る。（ラズパイ）</p>
+        <p>※※gitのurl貼る。（ダミーデータの送信用）</p>
         <p>プログラムの説明</p>
       </div>
 
