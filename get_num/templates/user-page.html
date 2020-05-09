@@ -10,10 +10,11 @@
     <title>勤怠管理</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "css/user-page_css.css" %}">
+    <script type="text/javascript" src={% static 'js/customChange.js' %}></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">勤怠管理システム{{user}}さん</a>
+        <a class="navbar-brand" href="#">勤怠管理システム{{user}}さんget_num/templates</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
                 aria-expand="false"
                 aria-label="ナビゲーションの切替">
@@ -44,6 +45,17 @@
       <div class="work_time">
         <div id="edit_area"></div>
       </div>
+    </div>
+
+    <div class="main">
+        <div class="text">現在の状況</div>
+        <!-- <p class="textCenter">text</p> -->
+        <div class="img-zone">
+            <img id="image01" alt="statusIMG">
+            <!-- <img src="{% static "img/work_or_sabori_change.png"%}" alt="statusIMG"> -->
+        </div>
+        <div id="text01" class="text">message</div>
+        <script type="text/javascript">load();</script>
     </div>
 
     <div class="container">
@@ -92,7 +104,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore-min.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-
     <script>
       //reload();
       //var color=[400,400,400];
@@ -217,7 +228,6 @@
                 },
               }
             });
-
 
         //配列の要素の総和を返す関数
         function sum_array(data){
