@@ -10,7 +10,7 @@
     <title>勤怠管理</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "css/user-page_css.css" %}">
-    <script type="text/javascript" src={% static 'js/customChange.js' %}></script>
+    <!-- <script type="text/javascript" src={% static 'js/customChange2.js' %}></script> -->
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -51,10 +51,48 @@
         <div class="text">現在の状況</div>
         <!-- <p class="textCenter">text</p> -->
         <div class="img-zone">
-            <img id="image01" alt="statusIMG">
+            <img id="image01" alt="statusIMG" >
             <!-- <img src="{% static "img/work_or_sabori_change.png"%}" alt="statusIMG"> -->
         </div>
         <div id="text01" class="text">message</div>
+        <script type="text/javascript">
+
+        function load(){
+            var statusNO = 2;
+
+            var imgNO = document.getElementById("image01");
+            var txtNO = document.getElementById("text01");
+
+            var imgStatus1 = '{% static "img/status1.jpg" %}';
+            //var imgStatus1 = "status1.jpg";
+            //var imgStatus1=""{% static "img/work_or_sabori_change.png"%}""
+            var txtStatus1 = "勤務開始!今日も一日頑張ろuuuu"
+            var imgStatus2 = '{% static "img/status2.jpg" %}';
+            var txtStatus2 = "大丈夫?このままだと間に合わないかも..."
+            var imgStatus3 = '{% static "img/status3.jpg" %}';
+            var txtStatus3 = "お疲れ様!よく頑張ったね!"
+            var imgStatus4 = '{% static "img/status4.jpg" %}';
+            var txtStatus4 = "働きすぎ!?休憩もしっかりね!"
+
+            if (statusNO == 2){
+                imgNO.src = imgStatus2;
+                txtNO.innerHTML = txtStatus2;
+            }else
+                if (statusNO == 3){
+                    imgNO.src = imgStatus3;
+                    txtNO.innerHTML = txtStatus3;
+                }else
+                    if (statusNO == 4){
+                        imgNO.src = imgStatus4;
+                        txtNO.innerHTML = txtStatus4;
+                    }else{
+                        imgNO.src = imgStatus1;
+                        txtNO.innerHTML = txtStatus1;
+                    }
+
+        }
+
+        </script>
         <script type="text/javascript">load();</script>
     </div>
 
@@ -397,6 +435,7 @@
         });
 
 
+    
 
     </script>
 
