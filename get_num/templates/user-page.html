@@ -14,7 +14,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">勤怠管理システム{{user}}さんget_num/templates</a>
+        <a class="navbar-brand" href="#">RAMACS {{user}}さん専用ページ</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
                 aria-expand="false"
                 aria-label="ナビゲーションの切替">
@@ -24,13 +24,19 @@
         <div class="collapse navbar-collapse" id="Navber">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'index' %}">トップページ</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% url 'admin:index' %}">管理サイト</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
+              <a class="nav-link" href="{% url 'kanri-page' %}">勤務時間管理ページ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'index' %}">トップページ</a>
+              <a class="nav-link" href="{% url 'admin:password_change' %}">パスワード変更</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
             </li>
           </ul>
         </div>
@@ -55,18 +61,92 @@
             <!-- <img src="{% static "img/work_or_sabori_change.png"%}" alt="statusIMG"> -->
         </div>
         <div id="text01" class="text">message</div>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore-min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
         <script type="text/javascript">
 
+        function workTimeCalc_character(data){
+          var times=0;
+          for (var i=0,len=data.length;i<len;i++){
+            if(data[i]==1){
+              times+=3;
+            }else{
+              times=times;
+            }
+          }
+          return times;
+        }
+
+        var workTime_today_character=function() {
+           //var res=800;
+
+            // 指定時間を取得
+            //var times = $('input[name=times]:checked').val();
+            var jikan_now=new Date();//現在時刻の格納
+
+            var hour=jikan_now.getHours();//現在時刻にする??
+            var min=jikan_now.getMinutes();
+            // 1日、３日、７日 前 の時間を設定 paramはいつからのデータが欲しいのかの
+                                          //時間をYYYY-MM-DD HH:mm:ss形式で与える
+            // var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+            var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+            //var param = moment().subtract(min,'minutes').format('YYYY-MM-DD HH:mm:ss')
+            //var now=moment().format('YYYY-MM-DD HH:mm:ss');
+            //now =now.getHours(now.getHours()+times);
+
+            $.getJSON('/api/logs?created_at__gte=' + param)
+                .done(function (source) {
+                    var data_work = new Array(1);
+                    //var color=[];
+                    const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+                    data_work[0] = _.pluck(filted, 'work_or_sabori');
+                    //data_work[0]=[0,0,0,1,1,1,1,1];
+                    //color= _.pluck(filted, 'press_ave_3min');
+                    var str=workTimeCalc_character(data_work[0]);
+                    //var str=workTimeCalc([0,0,0,0,1,1,1,1]);
+                    //document.getElementById('edit_area').innerHTML = str+'分' ;
+                    //res=0;
+                    return str;
+                })
+             //return res;
+        };
+
+
         function load(){
-            var statusNO = 2;
+          // ここからStatusNOのための関数
+          // 1.通常(else:) 2.さぼりすぎ(if3:16時以降に3時間未満) 3.完了(if2:6h以上勤務) 4.働きすぎ(if1:8h以上勤務)
+          var stime = new Date();
+          // var shour = 8;
+          var shour = stime.getHours();
+          console.log("時間:" + shour);
+
+          var worktime = workTime_today_character();//働いた時間を代入する
+          //var worktime=test_return();
+          //var worktime=0;
+          var shour = 18;
+
+          if (worktime > 8 * 60) {
+              var statusNO = 4;
+          } else if (worktime >= 6 * 60) {
+              var statusNO = 3;
+          } else if (worktime <= 3 * 60 && shour >= 16) {
+              var statusNO = 2;
+          } else {
+              var statusNO = 1;
+          }
+
+
 
             var imgNO = document.getElementById("image01");
             var txtNO = document.getElementById("text01");
 
             var imgStatus1 = '{% static "img/status1.jpg" %}';
-            //var imgStatus1 = "status1.jpg";
-            //var imgStatus1=""{% static "img/work_or_sabori_change.png"%}""
-            var txtStatus1 = "勤務開始!今日も一日頑張ろuuuu"
+            var txtStatus1 = "勤務開始!今日も一日頑張ろう"
             var imgStatus2 = '{% static "img/status2.jpg" %}';
             var txtStatus2 = "大丈夫?このままだと間に合わないかも..."
             var imgStatus3 = '{% static "img/status3.jpg" %}';
@@ -435,7 +515,7 @@
         });
 
 
-    
+
 
     </script>
 

@@ -31,7 +31,8 @@ urlpatterns = [
     path('user-page/<int:pk>/',userPage,name="user-page"),
     # path('kanri-page/',KanriView.workKanriView,name="kanri-page"),
     path('kanri-page/',KanriView.as_view(),name="kanri-page"),
+    path('/admin/password_change/',admin.site.urls),
     # path('tamago/',include('get_num.urls')),
 ]
 
-admin.site.site_header='勤怠管理＋slackステータス自動変更'
+admin.site.site_header='RAMACS (Remote-Work Attendance Management And Communication Support)'

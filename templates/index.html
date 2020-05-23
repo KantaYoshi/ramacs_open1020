@@ -7,13 +7,13 @@
           content="width=device-width, user-scalable=no,initial-scale=1.0,maximam-scale=1.0,minimum-scale=1.0">
     <!-- <meta http-equiv="refresh" content="180"> -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>勤怠管理</title>
+    <title>RAMACS</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "css/master.css" %}">
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">勤怠管理システム0415/templates</a>
+        <a class="navbar-brand" href="#">RAMACS</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
                 aria-expand="false"
                 aria-label="ナビゲーションの切替">
@@ -22,16 +22,19 @@
         <div class="collapse navbar-collapse" id="Navber">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:index' %}">管理サイト</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="{% url 'user-page' user.pk %}">ユーザーページ</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
+              <a class="nav-link" href="{% url 'admin:index' %}">管理サイト</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'kanri-page' %}">働き時間確認</a>
+              <a class="nav-link" href="{% url 'kanri-page' %}">勤務時間管理ページ</a>
+            </li>
+            <li class-"nav-item">
+              <a class="nav-link" href="{% url 'admin:password_change' %}">パスワード変更</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:logout' %}">ログアウト</a>
             </li>
           </ul>
         </div>
@@ -177,7 +180,7 @@
 
       <footer>
         <div class="footer-logo">
-          <p>Slacking</p>
+          <p>RAMACS</p>
         </div>
         <div class="footer-list">
           <ul>
