@@ -9,17 +9,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>勤怠管理</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static "css/user-page_css.css" %}">
+    <link rel="stylesheet" href="{% static "css/user-page_css2.css" %}">
     <!-- <script type="text/javascript" src={% static 'js/customChange2.js' %}></script> -->
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">RAMACS {{user}}さん専用ページ</a>
+        <!-- <div class="header"> -->
+        <a class="navbar-brand" href="{% url 'index' %}"><strong>RAMACS</strong> {{user}}さん専用ページ</a>
+        <div class="button_nav">
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber"
                 aria-expand="false"
                 aria-label="ナビゲーションの切替">
             <span class="navbar-toggler-icon"></span>
         </button>
+        </div>
+        <!-- </div> -->
 
         <div class="collapse navbar-collapse" id="Navber">
           <ul class="navbar-nav mr-auto">
@@ -48,19 +52,55 @@
     </div>
     <div class="temple2">
       <p>今日の勤務時間を確認    <input type="button" value="Check" onclick="workTime_today()"></p>
-      <div class="work_time">
-        <div id="edit_area"></div>
-      </div>
+      <a class="work_time">
+        <a id="edit_area"></a>
+      </a>
     </div>
 
+    <!-- <div class="check_points">
+    <div class="row mt-3">
+      <div class="col-12">
+        <form>
+          <fieldset class="form-group">
+            <div class="hyouji_kikan">
+            <b>表示期間の切り替え</b>
+            </div>
+            <div class="text-right">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio"　class="form-check-input" name="times" value="24" id="term_4" >
+                  24時間
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="times" value="12" id ="term_3">
+                  12時間
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="times"  value="1" id="term_1" checked >
+                1時間
+              </label>
+          </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div> -->
+
     <div class="main">
-        <div class="text">現在の状況</div>
         <!-- <p class="textCenter">text</p> -->
         <div class="img-zone">
-            <img id="image01" alt="statusIMG" >
+          <div class="text_character">
+            <div id="text01" ><b>message</b></div>
+          </div>
+          <img id="image01" alt="statusIMG" >
             <!-- <img src="{% static "img/work_or_sabori_change.png"%}" alt="statusIMG"> -->
         </div>
-        <div id="text01" class="text">message</div>
+
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
@@ -146,13 +186,13 @@
             var txtNO = document.getElementById("text01");
 
             var imgStatus1 = '{% static "img/status1.jpg" %}';
-            var txtStatus1 = "勤務開始!今日も一日頑張ろう"
+            var txtStatus1 = "勤務開始!"
             var imgStatus2 = '{% static "img/status2.jpg" %}';
-            var txtStatus2 = "大丈夫?このままだと間に合わないかも..."
+            var txtStatus2 = "大丈夫?"
             var imgStatus3 = '{% static "img/status3.jpg" %}';
-            var txtStatus3 = "お疲れ様!よく頑張ったね!"
+            var txtStatus3 = "お疲れ様!"
             var imgStatus4 = '{% static "img/status4.jpg" %}';
-            var txtStatus4 = "働きすぎ!?休憩もしっかりね!"
+            var txtStatus4 = "働きすぎ!?"
 
             if (statusNO == 2){
                 imgNO.src = imgStatus2;
@@ -176,44 +216,50 @@
         <script type="text/javascript">load();</script>
     </div>
 
-    <div class="container">
+    <div class="myLineChart">
       <div class="container">
-          <canvas id="myChart" ></canvas>
+        <canvas id="myChart" ></canvas>
       </div>
-    </div>
 
-      <div class="row mt-3">
-        <div class="col-12">
-          <form>
-            <fieldset class="form-group">
-              <legend class="text-center">表示期間</legend>
-              <div class="text-center">
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio"　class="form-check-input" name="times" value="24" id="term_4" >
-                    24時間
-                  </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="times" value="12" id ="term_3">
-                    12時間
-                  </label>
+
+    <div class="check_points">
+    <div class="row mt-3">
+      <div class="col-12">
+        <form>
+          <fieldset class="form-group">
+            <!-- <div class="hyouji_kikan">
+            <b>表示期間の切り替え</b>
+            </div> -->
+            <div class="text-right">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio"　class="form-check-input" name="times" value="24" id="term_4" >
+                  24時間
+                </label>
               </div>
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input type="radio" class="form-check-input" name="times"  value="1" id="term_1" checked >
-                  1時間
+                  <input type="radio" class="form-check-input" name="times" value="12" id ="term_3">
+                  12時間
                 </label>
             </div>
-            </fieldset>
-          </form>
-        </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="times"  value="1" id="term_1" checked >
+                1時間
+              </label>
+          </div>
+          </fieldset>
+        </form>
       </div>
     </div>
-
-    <canvas id="myBarChart" heigth="30%" width="10%" ></canvas>
+  </div>
+  </div>
+  </div>
+    <div class="BarChart_week">
+      <canvas id="myBarChart" heigth="30%" width="10%" ></canvas>
     <!-- <input type="button" value="Check" onclick="workTime_week()"> -->
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
