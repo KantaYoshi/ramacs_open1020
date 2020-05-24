@@ -449,8 +449,11 @@
                       var data_work = new Array(1);
                       const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
                       data_work[0] = _.pluck(filted, 'work_or_sabori');
-                      data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
-                      //data_week.push(200);
+                      if (workTimeCalc(data_work[0])-sum_array(data_week)>=0){
+                        data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+                      }else {
+                        data_week.unshihft((workTimeCalc(data_work[0])-sum_array(data_week))*-1);
+                      }
                   })
             }
             //data_week=[300,300,300,300,300,300,300];
