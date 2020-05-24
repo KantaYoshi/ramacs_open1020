@@ -7,7 +7,7 @@
           content="width=device-width, user-scalable=no,initial-scale=1.0,maximam-scale=1.0,minimum-scale=1.0">
     <meta http-equiv="refresh" content="180">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>勤怠管理</title>
+    <title>RAMACS ユーザーページ</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "css/user-page_css2.css" %}">
     <!-- <script type="text/javascript" src={% static 'js/customChange2.js' %}></script> -->
@@ -416,46 +416,46 @@
             // }
 
             for(var i=0; i<7; i++){
-              // if (i==0){
-              //   var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
-              //   $.getJSON('/api/logs?created_at__gte=' + param)
-              //       .done(function (source) {
-              //           var data_work = new Array(1);
-              //           const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
-              //           data_work[0] = _.pluck(filted, 'work_or_sabori');
-              //           data_week[6]=workTimeCalc(data_work[0]);
-              //           //data_week[6]=200;
-              //         })
-              // }else{
-              //   var day=i;
-              //   var hour_week=hour+24*i;
-              //   var param = moment().subtract({'hours':hour_week,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
-              //   $.getJSON('/api/logs?created_at__gte=' + param)
-              //       .done(function (source) {
-              //           var data_work = new Array(1);
-              //           const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
-              //           data_work[0] = _.pluck(filted, 'work_or_sabori');
-              //           //data_week[6-i]=workTimeCalc(data_work[0])-sum_array(data_week);
-              //           data_week[6-i]=workTimeCalc(data_work[0]);
-              //           //data_week[6-i]=200;
-              //         })
-              //  }
-              var hour_week=hour;
-              var row=i;
-              var param = moment().subtract({'hours':hour_week+(24*i),'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+              //var hour_week=hour;
+              //var row=i;
+              // if (i=0){
+              var param = moment().subtract({'hours':hour,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
 
               $.getJSON('/api/logs?created_at__gte=' + param)
                   .done(function (source) {
                       var data_work = new Array(1);
                       const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
                       data_work[0] = _.pluck(filted, 'work_or_sabori');
-                      if (workTimeCalc(data_work[0])-sum_array(data_week)>=0){
-                        data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
-                      }else {
-                        data_week.unshihft((workTimeCalc(data_work[0])-sum_array(data_week))*-1);
-                      }
+                      data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+                      // if (workTimeCalc(data_work[0])-sum_array(data_week)>=0){
+                      //   data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+                      //   //data[i]=workTimeCalc(data_work[0])-sum_array(data_week);
+                      // }else {
+                      //   data_week.unshift((workTimeCalc(data_work[0])-sum_array(data_week))*-1);
+                      //   //data[i]=0;
+                      //
+                      // }
                   })
-            }
+            //}//else {
+            //   var param = moment().subtract({'hours':hour+24*i,'minutes':min}).format('YYYY-MM-DD HH:mm:ss');
+            //
+            //   $.getJSON('/api/logs?created_at__gte=' + param)
+            //       .done(function (source) {
+            //           var data_work = new Array(1);
+            //           const filted =source.filter(x=>x.user_label==='{{user}}');//3のところをpkにする
+            //           data_work[0] = _.pluck(filted, 'work_or_sabori');
+            //           //data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+            //           if (workTimeCalc(data_work[0])-sum_array(data_week)>=0){
+            //             data_week.unshift(workTimeCalc(data_work[0])-sum_array(data_week));
+            //             //data[i]=workTimeCalc(data_work[0])-sum_array(data_week);
+            //           }else {
+            //             data_week.unshift((workTimeCalc(data_work[0])-sum_array(data_week))*-1);
+            //             //data[i]=0;
+            //
+            //           }
+            //       })
+            // }
+          }
             //data_week=[300,300,300,300,300,300,300];
             return data_week;
         };
